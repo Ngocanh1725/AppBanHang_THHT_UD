@@ -10,8 +10,10 @@ namespace SalesApp
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblLogo;
         private System.Windows.Forms.Label lblPluginTitle;
-        private System.Windows.Forms.FlowLayoutPanel flpPluginMenu; // Vùng chứa các nút Plugin động
-        private System.Windows.Forms.Button btnWarehouse; // ĐƯA KHAI BÁO NÚT KHO HÀNG LÊN ĐÂY
+        private System.Windows.Forms.FlowLayoutPanel flpPluginMenu;
+        private System.Windows.Forms.Button btnWarehouse;
+        // KHAI BÁO NÚT GIỎ HÀNG
+        private System.Windows.Forms.Button btnCart;
 
         private void InitializeComponent()
         {
@@ -22,6 +24,8 @@ namespace SalesApp
             this.lblLogo = new System.Windows.Forms.Label();
             this.lblPluginTitle = new System.Windows.Forms.Label();
             this.flpPluginMenu = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnWarehouse = new System.Windows.Forms.Button();
+            this.btnCart = new System.Windows.Forms.Button(); // Khởi tạo nút giỏ hàng
             this.SuspendLayout();
 
             this.Text = "Hệ thống Bán Hàng Hiện Đại";
@@ -31,12 +35,11 @@ namespace SalesApp
             this.Font = new System.Drawing.Font("Segoe UI", 10F);
 
             // 
-            // pnlSidebar (Menu bên trái)
+            // SIDEBAR BÊN TRÁI
             // 
             this.pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlSidebar.Width = 260;
-            // CHỈNH MÀU NỀN ĐẬM VÀ MÀU CHỮ SÁNG ĐỂ LUÔN NỔI BẬT
-            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(34, 47, 62);
+            this.pnlSidebar.BackColor = System.Drawing.Color.FromArgb(34, 47, 62); // Nền đậm
             this.pnlSidebar.ForeColor = System.Drawing.Color.White;
             this.pnlSidebar.Padding = new System.Windows.Forms.Padding(20);
 
@@ -47,8 +50,7 @@ namespace SalesApp
             this.lblLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblLogo.Height = 80;
 
-            // NÚT MỚI: QUẢN LÝ KHO HÀNG (Đã sửa thành biến toàn cục btnWarehouse)
-            this.btnWarehouse = new System.Windows.Forms.Button();
+            // NÚT: QUẢN LÝ KHO HÀNG
             this.btnWarehouse.Text = "📦 Quản lý Kho hàng";
             this.btnWarehouse.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnWarehouse.Height = 50;
@@ -60,11 +62,11 @@ namespace SalesApp
             this.btnWarehouse.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnWarehouse.Click += new System.EventHandler(this.BtnWarehouse_Click);
 
-            // THÊM VÀO SIDEBAR VÀ SẮP XẾP LẠI VỊ TRÍ
             this.pnlSidebar.Controls.Add(this.btnWarehouse);
             this.pnlSidebar.Controls.Add(this.lblLogo);
-            this.btnWarehouse.BringToFront(); // Nút Kho hàng ở dưới
-            this.lblLogo.BringToFront();      // Ép Logo lên trên cùng nhất
+
+            this.lblLogo.BringToFront();       // 1. Ép Logo lên trên cùng nhất
+            this.btnWarehouse.BringToFront();  // 2. Ép Nút Kho hàng nằm ngay dưới Logo
 
             // Tiêu đề Plugin Menu
             this.lblPluginTitle.Text = "\nCÔNG CỤ TÍCH HỢP (PLUGIN)";
@@ -87,13 +89,27 @@ namespace SalesApp
             this.pnlHeader.Height = 90;
             this.pnlHeader.BackColor = System.Drawing.Color.Transparent;
 
-            // Xóa chữ Khóa Học, chỉ để Sản Phẩm
+            // Chữ Sản Phẩm
             this.lblTitle.Text = "Sản phẩm";
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 26F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(45, 52, 54);
             this.lblTitle.Location = new System.Drawing.Point(30, 20);
             this.lblTitle.AutoSize = true;
+
+            // NÚT: XEM GIỎ HÀNG (MỚI THÊM)
+            this.btnCart.Text = "🛒 Xem Giỏ Hàng";
+            this.btnCart.Location = new System.Drawing.Point(750, 20); // Đặt góc phải
+            this.btnCart.Size = new System.Drawing.Size(160, 45);
+            this.btnCart.BackColor = System.Drawing.Color.FromArgb(253, 203, 110);
+            this.btnCart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCart.FlatAppearance.BorderSize = 0;
+            this.btnCart.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnCart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCart.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right; // Đảm bảo nút luôn bám góc phải khi kéo giãn form
+            this.btnCart.Click += (s, e) => { new CartForm().ShowDialog(); }; // Sự kiện gọi form giỏ hàng
+
             this.pnlHeader.Controls.Add(this.lblTitle);
+            this.pnlHeader.Controls.Add(this.btnCart); // Thêm nút giỏ hàng vào header
 
             // 
             // KHU VỰC CHỨA CÁC THẺ SẢN PHẨM
@@ -102,7 +118,7 @@ namespace SalesApp
             this.flpProducts.AutoScroll = true;
             this.flpProducts.Padding = new System.Windows.Forms.Padding(30, 10, 30, 30);
 
-            // Thêm các vùng vào giao diện
+            // Thêm các vùng vào form chính
             this.Controls.Add(this.flpProducts);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.pnlSidebar);
