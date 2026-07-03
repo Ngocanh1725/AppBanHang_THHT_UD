@@ -1,5 +1,4 @@
-﻿// PROJECT: SalesApp
-// FILE: DbIntegrationModule.cs
+﻿
 // MỤC ĐÍCH: Xử lý các thao tác tích hợp, kết nối an toàn với Cơ Sở Dữ Liệu
 using System;
 using System.Collections.Generic;
@@ -9,12 +8,14 @@ using System.Windows.Forms;
 namespace SalesApp
 {
     public class DbIntegrationModule
+    //Sử dụng công nghệ ADO.NET (thông qua thư viện Microsoft.Data.SqlClient).
+    //khai báo 2 chuỗi kết nối riêng biệt
     {
         // Chuỗi kết nối DB Bán hàng (Quản lý giỏ hàng/đơn hàng)
-        private string _salesConnString = @"Server=localhost;Database=ModernSalesDB;Integrated Security=True;TrustServerCertificate=True;";
+        private string _salesConnString = @"Server=ADMIN-PC;Database=ModernSalesDB;Integrated Security=True;TrustServerCertificate=True;";
 
         // Chuỗi kết nối DB Kho hàng (Quản lý tồn kho)
-        private string _warehouseConnString = @"Server=localhost;Database=WarehouseDB;Integrated Security=True;TrustServerCertificate=True;";
+        private string _warehouseConnString = @"Server=ADMIN-PC;Database=WarehouseDB;Integrated Security=True;TrustServerCertificate=True;";
 
         // 1. Constructor mặc định (Dùng cho CartForm gọi đơn giản)
         public DbIntegrationModule()
@@ -28,13 +29,13 @@ namespace SalesApp
         }
 
         // =================================================================================
-        // HÀM MỚI TỐI QUAN TRỌNG: XỬ LÝ LƯU NHIỀU ĐƠN HÀNG CÙNG LÚC SỬ DỤNG SQL TRANSACTION
+        // 4. THỰC HIỆN KẾT NỐI DỮ LIỆU GIỮA CÁC HT
         // =================================================================================
-        public bool IntegrateMultipleOrders(List<CartItem> cartItems)
+        public bool IntegrateMultipleOrders(List<CartItem> cartItems)// Bước 4: Thực hiện tích hợp dữ liệu giữa 2 CSDL (Kho hàng & Bán hàng) cho nhiều món trong giỏ hàng 
         {
             try
             {
-                // Bước 1: KẾT NỐI KHO (WarehouseDB) ĐỂ KIỂM TRA & TRỪ TỒN KHO HÀNG LOẠT
+                // 4.1. Bước 1: KẾT NỐI KHO (WarehouseDB) ĐỂ KIỂM TRA & TRỪ TỒN KHO HÀNG LOẠT
                 using (SqlConnection warehouseConn = new SqlConnection(_warehouseConnString))
                 {
                     warehouseConn.Open();
@@ -82,7 +83,7 @@ namespace SalesApp
                     }
                 }
 
-                // Bước 2: KẾT NỐI BÁN HÀNG (ModernSalesDB) ĐỂ LƯU HÀNG LOẠT ĐƠN HÀNG
+                //4.2. Bước 2: KẾT NỐI BÁN HÀNG (ModernSalesDB) ĐỂ LƯU ĐƠN HÀNG
                 using (SqlConnection salesConn = new SqlConnection(_salesConnString))
                 {
                     salesConn.Open();
@@ -119,7 +120,7 @@ namespace SalesApp
         }
 
         // =================================================================================
-        // CÁC HÀM CŨ XỬ LÝ MUA LẺ (DUY TRÌ ĐỂ BACKWARD COMPATIBILITY CHO CHECKOUT FORM CŨ)
+
         // =================================================================================
 
         // Hàm kiểm tra tồn kho (Gọi TRƯỚC khi mở QR Code mua lẻ)
